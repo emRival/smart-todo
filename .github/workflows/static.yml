@@ -34,8 +34,17 @@ jobs:
       # TAMBAHAN: Replace API keys sebelum deploy
       - name: Replace API Keys
         run: |
-          sed -i 's/YOUR_FIREBASE_API_KEY_PLACEHOLDER/${{ secrets.API_KEY_FIREBASE }}/g' *.html
-          sed -i 's/YOUR_GEMINI_API_KEY_PLACEHOLDER/${{ secrets.API_KEY_GEMINI }}/g' *.html
+          echo "Files before replacement:"
+          ls -la *.html
+          echo "Checking for placeholders:"
+          grep -n "PLACEHOLDER" *.html || echo "No placeholders found"
+          
+          # Replace dengan nama file spesifik
+          sed -i 's/YOUR_FIREBASE_API_KEY_PLACEHOLDER/${{ secrets.API_KEY_FIREBASE }}/g' index.html
+          sed -i 's/YOUR_GEMINI_API_KEY_PLACEHOLDER/${{ secrets.API_KEY_GEMINI }}/g' index.html
+          
+          echo "After replacement:"
+          grep -n "PLACEHOLDER" *.html || echo "All placeholders replaced"
           
       - name: Setup Pages
         uses: actions/configure-pages@v5
