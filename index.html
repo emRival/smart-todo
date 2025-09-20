@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Primary Meta Tags -->
+    <title>Smart ToDo-List With AI</title>
+    <meta name="title" content="Smart ToDo-List With AI" />
+    <meta
+      name="description"
+      content="Modern smart to-do list app icon representing organization and productivity. Perfect for digital planning, task management, and achieving goals efficiently." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://github.io/smart-todo" />
+    <meta property="og:title" content="Smart ToDo-List With AI" />
+    <meta
+      property="og:description"
+      content="Modern smart to-do list app icon representing organization and productivity. Perfect for digital planning, task management, and achieving goals efficiently." />
+    <meta
+      property="og:image"
+      content="https://github.io/smart-todo/icons/apple-icon-144x144.png" />
+
+    <!-- X (Twitter) -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://github.io/smart-todo" />
+    <meta property="twitter:title" content="Smart ToDo-List With AI" />
+    <meta
+      property="twitter:description"
+      content="Modern smart to-do list app icon representing organization and productivity. Perfect for digital planning, task management, and achieving goals efficiently." />
+    <meta
+      property="twitter:image"
+      content="https://github.io/smart-todo/icons/apple-icon-144x144.png" />
+
+    <!-- Meta Tags Generated with https://metatags.io -->
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Manifest yang diperbaiki -->
+
+    <link
+      rel="apple-touch-icon"
+      sizes="57x57"
+      href="/icons/apple-icon-57x57.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="/icons/apple-icon-60x60.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="/icons/apple-icon-72x72.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="/icons/apple-icon-76x76.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="/icons/apple-icon-114x114.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="/icons/apple-icon-120x120.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="/icons/apple-icon-144x144.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="/icons/apple-icon-152x152.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-icon-180x180.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/icons/android-icon-192x192.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/favicon-32x32.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/icons/favicon-96x96.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/favicon-16x16.png" />
+    <link rel="manifest" href="/icons/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide-react/dist/lucide-react.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/localeData.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/id.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="loader">
+      <div class="spinner"></div>
+    </div>
+
+    <div
+      id="change-id-banner"
+      class="hidden bg-yellow-100 dark:bg-yellow-900/50 border-b border-yellow-200 dark:border-yellow-800 p-3 text-center text-sm text-yellow-800 dark:text-yellow-200">
+      Anda menggunakan ID sementara.
+      <button
+        id="banner-change-id-btn"
+        class="font-bold underline hover:text-yellow-600 dark:hover:text-yellow-100">
+        Ganti ID Anda
+      </button>
+      agar mudah diingat dan tidak hilang.
+    </div>
+
+    <div
+      id="app-container"
+      class="min-h-screen p-4 sm:p-6 lg:p-8 opacity-0 transition-opacity duration-300">
+      <!-- Header and main content (unchanged) -->
+      <header class="flex justify-between items-center mb-6 flex-wrap gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold flex items-center gap-3">
+            <span>👋</span>Agenda Pribadi Saya
+          </h1>
+          <p
+            id="realtime-clock"
+            class="text-lg text-slate-500 dark:text-slate-400 font-medium"></p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            id="install-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-download">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" x2="12" y1="15" y2="3" />
+            </svg>
+          </button>
+          <div class="relative">
+            <button
+              id="notification-bell-btn"
+              class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-bell">
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+              </svg>
+              <span
+                id="notification-badge"
+                class="hidden absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"></span>
+            </button>
+            <div
+              id="notification-popover"
+              class="hidden absolute top-full right-0 mt-2 w-80 bg-card rounded-xl shadow-lg border border-default z-50">
+              <div class="p-3 border-b border-default font-semibold">
+                Deadline Mendekat
+              </div>
+              <div
+                id="notification-popover-list"
+                class="p-1 max-h-80 overflow-y-auto">
+                <!-- Popover content here -->
+              </div>
+            </div>
+          </div>
+          <button
+            id="mute-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+            <svg
+              id="icon-unmuted"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-volume-2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+            <svg
+              id="icon-muted"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-volume-x hidden">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="22" x2="16" y1="9" y2="15" />
+              <line x1="16" x2="22" y1="9" y2="15" />
+            </svg>
+          </button>
+          <button
+            id="settings-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-settings">
+              <path
+                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2.12l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1 0-2.12l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
+          <button
+            id="toggle-theme-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+            <svg
+              id="theme-icon-sun"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="hidden">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <svg
+              id="theme-icon-moon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="hidden">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+            <svg
+              id="theme-icon-system"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="hidden">
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-1 space-y-6">
+          <div class="bg-card p-4 rounded-xl shadow-md border border-default">
+            <div
+              id="calendar-header"
+              class="flex items-center justify-between mb-4">
+              <button
+                id="prev-month-btn"
+                class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </button>
+              <h2
+                id="month-year-label"
+                class="text-lg font-semibold text-center"></h2>
+              <button
+                id="next-month-btn"
+                class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+            </div>
+            <div id="calendar-grid" class="grid calendar-grid gap-y-1"></div>
+          </div>
+
+          <div class="bg-card p-4 rounded-xl shadow-md border border-default">
+            <h3 class="text-lg font-semibold mb-3 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2">
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                <path d="M4 2C2.8 3.7 2 5.7 2 8" />
+                <path d="M20 8c0-2.3-.8-4.3-2-6" /></svg
+              >Pengingat Hari Ini
+            </h3>
+            <div
+              id="reminders-list"
+              class="space-y-2 max-h-48 overflow-y-auto"></div>
+          </div>
+
+          <div class="bg-card p-4 rounded-xl shadow-md border border-default">
+            <h3 class="text-lg font-semibold mb-3 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2">
+                <path d="M12 20V10" />
+                <path d="M18 20V4" />
+                <path d="M6 20V16" /></svg
+              >Statistik Tugas
+            </h3>
+            <div id="stats-container" class="space-y-3 text-sm"></div>
+          </div>
+
+          <div class="bg-card p-4 rounded-xl shadow-md border border-default">
+            <h3 class="text-lg font-semibold mb-3 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              Pomodoro Timer
+            </h3>
+            <div class="text-center">
+              <div
+                id="pomodoro-display"
+                class="text-3xl font-mono font-bold mb-3 text-blue-600 dark:text-blue-400">
+                25:00
+              </div>
+              <div class="flex gap-1 justify-center mb-3">
+                <button
+                  id="pomodoro-start"
+                  class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded text-sm">
+                  Start
+                </button>
+                <button
+                  id="pomodoro-pause"
+                  class="px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded text-sm">
+                  Pause
+                </button>
+                <button
+                  id="pomodoro-reset"
+                  class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded text-sm">
+                  Reset
+                </button>
+              </div>
+              <div class="text-xs text-slate-500 space-x-2">
+                <button
+                  id="work-mode"
+                  class="pomodoro-mode-btn px-2 py-1 rounded bg-blue-100 dark:bg-blue-900">
+                  Kerja
+                </button>
+                <button
+                  id="break-mode"
+                  class="pomodoro-mode-btn px-2 py-1 rounded">
+                  Istirahat
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-card p-4 rounded-xl shadow-md border border-default">
+            <div class="flex justify-between items-center mb-2">
+              <p class="text-sm text-slate-500 dark:text-slate-400">
+                User ID Anda:
+              </p>
+              <button
+                id="logout-btn"
+                class="text-s font-semibold text-red-600 hover:underline">
+                Logout
+              </button>
+            </div>
+            <div
+              class="flex items-center gap-2 p-2 rounded-lg bg-slate-100 dark:bg-slate-700">
+              <p
+                id="user-id-display"
+                class="flex-1 font-mono text-xs break-all text-black dark:text-white"></p>
+              <button
+                id="copy-id-btn"
+                class="p-1.5 rounded-md hover:bg-slate-200">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="black"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+              </button>
+              <button
+                id="switch-user-btn"
+                class="p-1.5 rounded-md hover:bg-slate-200 dark:hover:bg-slate-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="black"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-pencil">
+                  <line x1="18" x2="22" y1="2" y2="6" />
+                  <path d="M7.5 20.5 19 9l-4-4L3.5 16.5 2 22z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 space-y-6">
+          <div
+            class="bg-card p-4 rounded-xl shadow-md min-h-[300px] border border-default">
+            <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+              <h3 id="tasks-header" class="text-lg font-semibold">
+                Tugas untuk Hari Ini
+              </h3>
+              <div class="flex items-center gap-2">
+                <button
+                  id="show-smart-add-modal-btn"
+                  class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-opacity flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-sparkles">
+                    <path
+                      d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                    <path d="M5 3v4" />
+                    <path d="M19 17v4" />
+                    <path d="M3 5h4" />
+                    <path d="M17 19h4" />
+                  </svg>
+                  Tambah Cerdas
+                </button>
+                <button
+                  id="show-add-task-modal-btn"
+                  class="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="mr-2">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" /></svg
+                  >Tambah Tugas
+                </button>
+              </div>
+            </div>
+            <div id="tasks-list" class="space-y-3"></div>
+          </div>
+
+          <div class="bg-card p-4 rounded-xl shadow-md border border-default">
+            <h3 class="text-lg font-semibold mb-3 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+                <path d="M12 7v5l4 2" /></svg
+              >Riwayat Semua Tugas
+            </h3>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
+              <input
+                type="text"
+                id="history-search"
+                placeholder="Cari tugas..."
+                class="lg:col-span-2 w-full bg-input border border-default rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+              <select
+                id="history-category-filter"
+                class="w-full bg-input border border-default rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="all">Semua Kategori</option>
+              </select>
+              <select
+                id="history-priority-filter"
+                class="w-full bg-input border border-default rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="all">Semua Prioritas</option>
+                <option value="high">Tinggi</option>
+                <option value="medium">Sedang</option>
+                <option value="low">Rendah</option>
+              </select>
+              <select
+                id="history-status-filter"
+                class="w-full bg-input border border-default rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="all">Semua Status</option>
+                <option value="completed">Selesai</option>
+                <option value="pending">Belum Selesai</option>
+              </select>
+            </div>
+            <div
+              id="history-list"
+              class="space-y-3 max-h-72 overflow-y-auto"></div>
+          </div>
+        </div>
+      </main>
+
+      <footer
+        class="text-center py-4 mt-8 text-xs text-slate-400 dark:text-slate-500 border-t border-default">
+        Credit by Muhammad Rival
+      </footer>
+    </div>
+
+    <!-- Modals -->
+    <div
+      id="task-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="task-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-md m-4 p-6 transform transition-all scale-95 opacity-0 border border-default">
+        <div class="flex justify-between items-center mb-4">
+          <h2 id="modal-title" class="text-xl font-bold"></h2>
+          <button
+            id="close-modal-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+        <form id="task-form">
+          <input type="hidden" id="task-id" />
+          <div class="space-y-4">
+            <div>
+              <label
+                for="task-name"
+                class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1"
+                >Nama Tugas</label
+              ><input
+                type="text"
+                id="task-name"
+                required
+                class="w-full bg-input border border-default rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+            <div>
+              <label
+                for="task-deadline"
+                class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1"
+                >Deadline</label
+              ><input
+                type="datetime-local"
+                id="task-deadline"
+                required
+                class="w-full bg-input border border-default rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+            <div>
+              <label
+                for="task-category"
+                class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1"
+                >Kategori</label
+              ><select
+                id="task-category"
+                class="w-full bg-input border border-default rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="Pribadi">Pribadi</option>
+                <option value="Pekerjaan">Pekerjaan</option>
+                <option value="Belajar">Belajar</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+            <div>
+              <label
+                for="task-priority"
+                class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1"
+                >Prioritas</label
+              ><select
+                id="task-priority"
+                class="w-full bg-input border border-default rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="medium">Sedang</option>
+                <option value="high">Tinggi</option>
+                <option value="low">Rendah</option>
+              </select>
+            </div>
+            <div>
+              <label
+                for="task-link"
+                class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1"
+                >Link (Opsional)</label
+              ><input
+                type="url"
+                id="task-link"
+                placeholder="https://contoh.com"
+                class="w-full bg-input border border-default rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label
+                  for="task-notes"
+                  class="block text-sm font-medium text-slate-600 dark:text-slate-300"
+                  >Catatan</label
+                >
+                <button
+                  type="button"
+                  id="generate-notes-btn"
+                  class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-semibold flex items-center gap-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-sparkles">
+                    <path
+                      d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                    <path d="M5 3v4" />
+                    <path d="M19 17v4" />
+                    <path d="M3 5h4" />
+                    <path d="M17 19h4" />
+                  </svg>
+                  Buat Rencana Aksi
+                </button>
+              </div>
+              <textarea
+                id="task-notes"
+                rows="3"
+                class="w-full bg-input border border-default rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="Tambah catatan atau buat rencana aksi dengan AI..."></textarea>
+            </div>
+          </div>
+          <div class="mt-6 flex justify-end">
+            <button
+              type="submit"
+              id="save-task-btn"
+              class="bg-primary text-primary-foreground px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
+              Simpan Tugas
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="smart-add-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="smart-add-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-lg m-4 p-6 transform transition-all scale-95 opacity-0 border border-default">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sparkles text-blue-500">
+              <path
+                d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+              <path d="M5 3v4" />
+              <path d="M19 17v4" />
+              <path d="M3 5h4" />
+              <path d="M17 19h4" />
+            </svg>
+            Tambah Tugas Cerdas
+          </h2>
+          <button
+            id="close-smart-add-modal-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">
+          Tempel teks (email, catatan, dll.) di bawah ini dan biarkan AI
+          menemukan tugas untuk Anda.
+        </p>
+        <textarea
+          id="smart-add-textarea"
+          rows="6"
+          class="w-full bg-input border border-default rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+          placeholder="Contoh: 'Tolong siapkan laporan penjualan untuk hari Jumat. Oh ya, jangan lupa juga untuk follow up dengan klien X besok pagi.'"></textarea>
+        <button
+          id="process-text-btn"
+          class="mt-4 w-full bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-opacity relative flex justify-center items-center gap-2">
+          <span class="btn-text">Proses Teks</span>
+        </button>
+        <div id="smart-add-results-container" class="mt-4 hidden">
+          <h3 class="font-semibold mb-2">Tugas yang Disarankan:</h3>
+          <div
+            id="smart-add-results"
+            class="space-y-2 max-h-48 overflow-y-auto p-2 border border-default rounded-lg"></div>
+          <button
+            id="add-selected-tasks-btn"
+            class="mt-4 w-full bg-primary text-primary-foreground px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
+            Tambah Tugas Terpilih
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="delete-confirm-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="delete-confirm-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-sm m-4 p-6 text-center transform transition-all scale-95 opacity-0 border border-default">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mx-auto mb-4 text-red-500">
+          <path
+            d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+          <path d="M12 9v4" />
+          <path d="M12 17h.01" />
+        </svg>
+        <h3 class="text-lg font-semibold mb-2">Anda Yakin?</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+          Tindakan ini tidak dapat diurungkan. Anda akan menghapus tugas ini
+          secara permanen.
+        </p>
+        <div class="flex justify-center gap-4">
+          <button
+            id="cancel-delete-btn"
+            class="px-6 py-2 rounded-lg text-sm font-medium bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">
+            Batal</button
+          ><button
+            id="confirm-delete-btn"
+            class="px-6 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700">
+            Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="login-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="login-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-sm m-4 p-6 transform transition-all scale-95 opacity-0 border border-default">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h2 id="login-modal-title" class="text-xl font-bold"></h2>
+            <p
+              id="login-modal-description"
+              class="text-sm text-slate-500 dark:text-slate-400 mt-1"></p>
+          </div>
+          <button
+            id="close-login-modal-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 -mt-2 -mr-2 flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+        <form id="login-form">
+          <div class="space-y-4">
+            <div>
+              <label
+                for="login-user-id"
+                class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1"
+                >User ID</label
+              >
+              <div class="relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <input
+                  type="text"
+                  id="login-user-id"
+                  required
+                  class="w-full bg-input border border-default rounded-lg pl-10 pr-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Contoh: andi-task-2025" />
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 flex justify-end">
+            <button
+              type="submit"
+              id="save-user-id-btn"
+              class="w-full bg-primary text-primary-foreground px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity relative">
+              <span class="btn-text">Masuk / Simpan ID</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      id="id-choice-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="id-choice-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-sm m-4 p-6 text-center transform transition-all scale-95 opacity-0 border border-default">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mx-auto mb-4 text-blue-500">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <polyline points="16 11 18 13 22 9" />
+        </svg>
+        <h3 class="text-xl font-bold mb-2">Selamat Datang!</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+          Buat sesi baru atau gunakan ID yang sudah ada?
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <button
+            id="create-new-id-btn"
+            class="w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700">
+            Buat ID Baru</button
+          ><button
+            id="use-existing-id-btn"
+            class="w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">
+            Gunakan ID Lama
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="initial-tasks-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="initial-tasks-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-lg m-4 p-6 transform transition-all scale-95 opacity-0 border border-default">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="mr-3 text-blue-500">
+              <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+              <path
+                d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+              <path d="M12 11h4" />
+              <path d="M12 16h4" />
+              <path d="M8 11h.01" />
+              <path d="M8 16h.01" /></svg
+            >Tugas Anda Hari Ini
+          </h2>
+          <button
+            id="close-initial-tasks-modal-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+        <div
+          id="initial-tasks-list"
+          class="space-y-3 max-h-80 overflow-y-auto"></div>
+        <div class="mt-6 flex justify-end">
+          <button
+            id="ok-initial-tasks-modal-btn"
+            class="w-full sm:w-auto bg-primary text-primary-foreground px-6 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
+            Mengerti
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="limit-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="limit-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-sm m-4 p-6 text-center transform transition-all scale-95 opacity-0 border border-default">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mx-auto mb-4 text-red-500">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" x2="12" y1="8" y2="12" />
+          <line x1="12" x2="12.01" y1="16" y2="16" />
+        </svg>
+        <h3 class="text-xl font-bold mb-2">Batas Pembuatan ID Tercapai</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          Anda sudah melebihi batas maksimal (2 kali) pembuatan user baru pada
+          perangkat ini.
+        </p>
+        <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">
+          Silakan reset cookie browser Anda atau hubungi kami untuk bantuan
+          lebih lanjut:
+        </p>
+        <p class="mt-2 font-semibold text-slate-800 dark:text-slate-200">
+          08998419000 (Muhammad Rival)
+        </p>
+      </div>
+    </div>
+    <div
+      id="logout-confirm-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="logout-confirm-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-md m-4 p-6 transform transition-all scale-95 opacity-0 border border-default">
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h2 class="text-xl font-bold">Anda Yakin Ingin Logout?</h2>
+            <p
+              class="text-sm text-red-500 dark:text-red-400 mt-2 font-semibold">
+              PENTING: Pastikan Anda sudah menyimpan User ID Anda. Jika lupa,
+              data tidak akan bisa diakses kembali.
+            </p>
+          </div>
+          <button
+            id="close-logout-modal-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 -mt-2 -mr-2 flex-shrink-0">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="p-3 rounded-lg bg-slate-100 dark:bg-slate-700 text-center mb-6">
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            ID Anda saat ini:
+          </p>
+          <p
+            id="logout-confirm-user-id"
+            class="font-mono font-bold text-black dark:text-white"></p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            id="logout-copy-id-btn"
+            class="w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path
+                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+            </svg>
+            Salin ID
+          </button>
+          <button
+            id="logout-change-id-btn"
+            class="w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-slate-200 text-black dark:text-black hover:bg-slate-300 dark:hover:bg-slate-600 flex items-center justify-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="black"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-pencil">
+              <line x1="18" x2="22" y1="2" y2="6" />
+              <path d="M7.5 20.5 19 9l-4-4L3.5 16.5 2 22z" />
+            </svg>
+            Ganti ID Dulu
+          </button>
+        </div>
+        <button
+          id="confirm-logout-btn"
+          class="mt-4 w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-red-600 text-white hover:bg-red-700">
+          Ya, Tetap Logout
+        </button>
+      </div>
+    </div>
+    <div
+      id="first-time-id-prompt-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="first-time-id-prompt-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-sm m-4 p-6 text-center transform transition-all scale-95 opacity-0 border border-default">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mx-auto mb-4 text-blue-500">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          <path d="M2 8c0-2.3.8-4.3 2-6" />
+          <path d="M22 8c0-2.3-.8-4.3-2-6" />
+        </svg>
+        <h3 class="text-xl font-bold mb-2">Ganti ID Anda?</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+          Anda memakai ID sementara yang sulit diingat. Kami sarankan untuk
+          menggantinya agar Anda bisa mengakses data dari perangkat lain.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <button
+            id="prompt-change-id-btn"
+            class="w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700">
+            Ganti ID Sekarang
+          </button>
+          <button
+            id="prompt-keep-id-btn"
+            class="w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">
+            Lain Kali
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="settings-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="settings-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-sm m-4 p-6 transform transition-all scale-95 opacity-0 border border-default">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold">Pengaturan</h2>
+          <button
+            id="close-settings-modal-btn"
+            class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 -mt-2 -mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+        <form id="settings-form">
+          <div class="space-y-4">
+            <div>
+              <label
+                for="panic-time-input"
+                class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1"
+                >Waktu Notifikasi Panik (menit)</label
+              >
+              <input
+                type="number"
+                id="panic-time-input"
+                min="1"
+                class="w-full bg-input border border-default rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="Default: 5" />
+            </div>
+          </div>
+          <div class="mt-6 flex justify-end">
+            <button
+              type="submit"
+              class="w-full bg-primary text-primary-foreground px-5 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
+              Simpan Pengaturan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      id="ghost-account-modal"
+      class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+      <div
+        id="ghost-account-modal-content"
+        class="bg-card rounded-xl shadow-2xl w-full max-w-sm m-4 p-6 text-center transform transition-all scale-95 opacity-0 border border-default">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mx-auto mb-4 text-blue-500">
+          <path
+            d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+          <path d="m15.5 9.5-1.5 1.5 2.5 2.5-4 4-2.5-2.5-1.5 1.5" />
+        </svg>
+        <h3 class="text-xl font-bold mb-2">Sesi Tidak Tersimpan</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+          Anda belum membuat tugas apa pun, jadi ID sementara ini tidak akan
+          disimpan. Apakah Anda ingin menghapus sesi ini?
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <button
+            id="delete-ghost-session-btn"
+            class="w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-red-600 text-white hover:bg-red-700">
+            Ya, Hapus Sesi
+          </button>
+          <button
+            id="cancel-ghost-btn"
+            class="w-full px-6 py-2.5 rounded-lg text-sm font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">
+            Batal
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="notification-container"></div>
+
+    <script type="module" src="scripts.js"></script>
+  </body>
+</html>

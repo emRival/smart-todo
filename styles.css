@@ -1,0 +1,104 @@
+:root {
+            --background: 240 5% 96%; /* slate-100 */
+            --foreground: 240 10% 3.9%; /* slate-950 */
+            --card: 0 0% 100%;
+            --card-foreground: 240 10% 3.9%;
+            --primary: 240 5.9% 10%;
+            --primary-foreground: 0 0% 98%;
+            --secondary: 240 4.8% 95.9%;
+            --secondary-foreground: 240 5.9% 10%;
+            --muted: 240 4.8% 95.9%;
+            --muted-foreground: 240 3.8% 46.1%;
+            --border: 240 5.9% 90%;
+            --input: 240 5.9% 90%;
+            --destructive: 0 84.2% 60.2%;
+        }
+
+        .dark {
+            --background: 240 10% 3.9%;
+            --foreground: 0 0% 98%;
+            --card: 240 10% 3.9%;
+            --card-foreground: 0 0% 98%;
+            --primary: 0 0% 98%;
+            --primary-foreground: 240 5.9% 10%;
+            --secondary: 240 3.7% 15.9%;
+            --secondary-foreground: 0 0% 98%;
+            --muted: 240 3.7% 15.9%;
+            --muted-foreground: 240 5% 64.9%;
+            --border: 240 3.7% 15.9%;
+            --input: 240 3.7% 15.9%;
+            --destructive: 0 62.8% 30.6%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+        
+        .bg-card { background-color: hsl(var(--card)); }
+        .text-card-foreground { color: hsl(var(--card-foreground)); }
+        .bg-primary { background-color: hsl(var(--primary)); }
+        .text-primary-foreground { color: hsl(var(--primary-foreground)); }
+        .border-default { border-color: hsl(var(--border)); }
+        .bg-input { background-color: hsl(var(--input)); }
+
+        .calendar-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+        .calendar-day { transition: all 0.2s ease-in-out; }
+        .calendar-day.has-tasks::after {
+            content: ''; position: absolute; bottom: 6px; left: 50%;
+            transform: translateX(-50%); width: 5px; height: 5px;
+            border-radius: 50%; background-color: hsl(var(--primary));
+        }
+        .dark .calendar-day.has-tasks::after { background-color: hsl(var(--primary-foreground)); }
+        .task-card:has(input:checked) { background-color: hsl(var(--secondary) / 0.6); }
+        .task-card:has(input:checked) label { text-decoration: line-through; color: hsl(var(--muted-foreground)); }
+        .modal-backdrop { background-color: rgba(0,0,0,0.5); transition: opacity 0.3s ease; }
+        
+        #notification-container {
+            position: fixed;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 350px;
+            max-width: calc(100% - 2rem);
+            bottom: 1rem; right: 1rem; 
+        }
+
+        .notification {
+            background-color: hsl(var(--card)); color: hsl(var(--card-foreground)); padding: 1rem;
+            border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0; transform: translateX(100%);
+        }
+        .notification.show { opacity: 1; transform: translateX(0); }
+        .notification.warn { border-left: 4px solid #f59e0b; }
+        .notification.danger { border-left: 4px solid #ef4444; }
+        .notification.info { border-left: 4px solid #3b82f6; }
+        
+        #loader, .btn-spinner-overlay {
+            display: flex; justify-content: center; align-items: center;
+            position: fixed; inset: 0; background-color: hsl(var(--background));
+            z-index: 9999; transition: opacity 0.3s ease;
+        }
+        .spinner, .btn-spinner {
+            width: 56px; height: 56px; border: 8px solid hsl(var(--secondary));
+            border-top-color: hsl(var(--primary)); border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .btn-spinner {
+            width: 20px; height: 20px; border-width: 3px;
+        }
+        .btn-spinner-overlay {
+            position: absolute; background: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes panic-flash {
+            50% { border-color: hsl(var(--destructive)); box-shadow: 0 0 12px hsl(var(--destructive) / 0.5); }
+        }
+        .is-panicking {
+            animation: panic-flash 0.8s infinite;
+            border-width: 2px;
+        }
