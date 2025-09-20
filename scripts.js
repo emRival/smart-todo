@@ -37,6 +37,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Tambahkan di bagian Firebase initialization
+console.log('Firebase API Key:', firebaseConfig.apiKey);
+console.log('Gemini API Key1:', GEMINI_API_KEY);
+console.log('Gemini API Key:', process.env.GEMINI_API_KEY);
+
 let userId,
   tasksCollectionRef,
   unsubscribeFromTasks,
