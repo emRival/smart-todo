@@ -39,18 +39,7 @@ jobs:
           find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" \) -exec sed -i 's/YOUR_GEMINI_API_KEY_PLACEHOLDER/${{ secrets.API_KEY_GEMINI }}/g' {} \;
           
           echo "Final verification:"
-                    find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" \) -exec grep -l "PLACEHOLDER" {} \; || echo "All placeholders replaced successfully"
-
-                      - name: Debug Environment
-                        run: |
-                          echo "GitHub Actor: ${{ github.actor }}"
-                          echo "Repository: ${{ github.repository }}"
-                          echo "Checking if secrets are available..."
-                          if [ -z "${{ secrets.API_KEY_FIREBASE }}" ]; then
-                            echo "ERROR: API_KEY_FIREBASE secret is not set!"
-                          else
-                            echo "SUCCESS: API_KEY_FIREBASE secret is available"
-                          fi
+          find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" \) -exec grep -l "PLACEHOLDER" {} \; || echo "All placeholders replaced successfully"
           
       - name: Setup Pages
         uses: actions/configure-pages@v5
