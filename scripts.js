@@ -24,7 +24,7 @@ import {
 
 // Konfigurasi Firebase
 const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
+  apiKey: process.env.API_KEY_FIREBASE,
   authDomain: "agenda-pribadi-saya.firebaseapp.com",
   projectId: "agenda-pribadi-saya",
   storageBucket: "agenda-pribadi-saya.firebasestorage.app",
@@ -1440,7 +1440,7 @@ const showInitialAlerts = () => {
 
 // --- Gemini API Functions ---
 const callGeminiForText = async (prompt) => {
-  const apiKey = "YOUR_API_KEY_HERE";
+  const apiKey = process.env.API_KEY_GEMINI;
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
   const payload = { contents: [{ parts: [{ text: prompt }] }] };
   const response = await fetch(apiUrl, {
@@ -1460,7 +1460,7 @@ const callGeminiForText = async (prompt) => {
 };
 
 const callGeminiForSmartAdd = async (prompt) => {
-  const apiKey = "YOUR_API_KEY_HERE";
+  const apiKey = process.env.API_KEY_GEMINI;
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
   const payload = {
     contents: [{ parts: [{ text: prompt }] }],
