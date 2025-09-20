@@ -109,7 +109,7 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+ <body>
     <div id="loader">
       <div class="spinner"></div>
     </div>
@@ -130,8 +130,9 @@
       id="app-container"
       class="min-h-screen p-4 sm:p-6 lg:p-8 opacity-0 transition-opacity duration-300">
       <!-- Header and main content (unchanged) -->
-      <header class="flex justify-between items-center mb-6 flex-wrap gap-4">
-        <div>
+      <header
+        class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+        <div class="flex-1 min-w-0">
           <h1 class="text-2xl sm:text-3xl font-bold flex items-center gap-3">
             <span>👋</span>Agenda Pribadi Saya
           </h1>
@@ -139,7 +140,7 @@
             id="realtime-clock"
             class="text-lg text-slate-500 dark:text-slate-400 font-medium"></p>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center justify-end gap-2 flex-shrink-0">
           <button
             id="install-btn"
             class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors hidden">
@@ -183,7 +184,7 @@
             </button>
             <div
               id="notification-popover"
-              class="hidden absolute top-full right-0 mt-2 w-80 bg-card rounded-xl shadow-lg border border-default z-50">
+              class="hidden absolute top-full right-0 mt-2 w-56 lg:w-80 max-w-[calc(100vw-2rem)] bg-card rounded-xl shadow-lg border border-default z-50">
               <div class="p-3 border-b border-default font-semibold">
                 Deadline Mendekat
               </div>
@@ -307,8 +308,7 @@
           </button>
         </div>
       </header>
-
-      <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <main class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
         <div class="lg:col-span-1 space-y-6">
           <div class="bg-card p-4 rounded-xl shadow-md border border-default">
             <div
@@ -419,7 +419,7 @@
             <div class="text-center">
               <div
                 id="pomodoro-display"
-                class="text-3xl font-mono font-bold mb-3 text-blue-600 dark:text-blue-400">
+                class="text-2xl sm:text-3xl font-mono font-bold mb-3 text-blue-600 dark:text-blue-400">
                 25:00
               </div>
               <div class="flex gap-1 justify-center mb-3">
@@ -513,11 +513,12 @@
         <div class="lg:col-span-2 space-y-6">
           <div
             class="bg-card p-4 rounded-xl shadow-md min-h-[300px] border border-default">
-            <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+            <div
+              class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
               <h3 id="tasks-header" class="text-lg font-semibold">
                 Tugas untuk Hari Ini
               </h3>
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2 self-end sm:self-center">
                 <button
                   id="show-smart-add-modal-btn"
                   class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-opacity flex items-center gap-2">
@@ -1308,6 +1309,8 @@
 
     <div id="notification-container"></div>
 
-    <script type="module" src="scripts.js"></script>
+    <script type="module">
+    
+    </script>
   </body>
 </html>

@@ -24,7 +24,7 @@ import {
 
 // Konfigurasi Firebase
 const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY_PLACEHOLDER",
+   apiKey: "YOUR_FIREBASE_API_KEY_PLACEHOLDER",
   authDomain: "agenda-pribadi-saya.firebaseapp.com",
   projectId: "agenda-pribadi-saya",
   storageBucket: "agenda-pribadi-saya.firebasestorage.app",
@@ -36,10 +36,6 @@ const appId = "personal-task-manager-app";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-// Tambahkan di bagian Firebase initialization
-// console.log('Firebase API Key:', firebaseConfig.apiKey);
-// console.log('Gemini API Key:', process.env.GEMINI_API_KEY);
 
 let userId,
   tasksCollectionRef,
@@ -132,31 +128,80 @@ let taskToDeleteId = null;
 dayjs.extend(dayjs_plugin_localeData);
 dayjs.locale("id");
 
-const initAudio = async () => {
+// Audio initialization - berdasarkan implementasi QUIZKU yang berfungsi di mobile
+// Audio initialization - berdasarkan implementasi QUIZKU yang berfungsi di mobile
+const initAudio = () => {
   if (audioInitialized) return;
+
   try {
-    await Tone.start();
-    synth = new Tone.Synth().toDestination();
-    panicLoop = new Tone.Loop((time) => {
-      synth.triggerAttackRelease("A5", "16n", time);
-    }, "4n");
-    audioInitialized = true;
+    // Force start Tone.js context
+    Tone.start()
+      .then(() => {
+        synth = new Tone.Synth().toDestination();
+        panicLoop = new Tone.Loop((time) => {
+          synth.triggerAttackRelease("A5", "16n", time);
+        }, "4n");
+        audioInitialized = true;
+        console.log("Audio initialized successfully");
+      })
+      .catch((e) => {
+        console.error("Failed to start Tone.js:", e);
+      });
   } catch (e) {
     console.error("Could not initialize audio:", e);
+  }
+};
+
+const playSound = (type) => {
+  // Jangan cek audioInitialized, langsung coba inisialisasi jika belum
+  if (!audioInitialized) {
+    initAudio();
+    return; // Skip sound this time, akan bermain di call berikutnya
+  }
+
+  if (!synth || isMuted) return;
+
+  try {
+    // Gunakan timing yang lebih sederhana seperti di QUIZKU
+    const now = Tone.now();
+
+    switch (type) {
+      case "notification":
+        synth.triggerAttackRelease("C5", "16n", now);
+        synth.triggerAttackRelease("E5", "16n", now + 0.1);
+        break;
+      case "loginSuccess":
+        synth.triggerAttackRelease("C4", "8n", now);
+        synth.triggerAttackRelease("E4", "8n", now + 0.1);
+        synth.triggerAttackRelease("G4", "8n", now + 0.2);
+        break;
+      case "taskCreate":
+        synth.triggerAttackRelease("C5", "16n", now);
+        break;
+      case "taskComplete":
+        synth.triggerAttackRelease("G4", "8n", now);
+        synth.triggerAttackRelease("C5", "8n", now + 0.1);
+        break;
+      case "taskDelete":
+        synth.triggerAttackRelease("C3", "8n", now);
+        break;
+      case "logout":
+        synth.triggerAttackRelease("G4", "8n", now);
+        synth.triggerAttackRelease("E4", "8n", now + 0.1);
+        synth.triggerAttackRelease("C4", "8n", now + 0.2);
+        break;
+    }
+  } catch (audioError) {
+    console.log("Audio error:", audioError);
+    // Jika ada error, coba reinisialisasi
+    audioInitialized = false;
+    initAudio();
   }
 };
 
 let lastSoundTime = 0;
 let soundQueue = [];
 let isProcessingSound = false;
-
-const playSound = (type) => {
-  if (!audioInitialized || !synth || isMuted) return;
-
-  // Add to queue instead of playing immediately
-  soundQueue.push(type);
-  processNextSound();
-};
 
 const processNextSound = () => {
   if (isProcessingSound || soundQueue.length === 0) return;
@@ -224,7 +269,7 @@ const renderCalendar = () => {
   elements.monthYearLabel.textContent = currentDate.format("MMMM YYYY");
   elements.calendarGrid.innerHTML = "";
   dayjs.weekdaysMin(true).forEach((day) => {
-    elements.calendarGrid.innerHTML += `<div class="flex items-center justify-center h-10 font-semibold text-xs text-slate-500 dark:text-slate-400">${day}</div>`;
+    elements.calendarGrid.innerHTML += `<div class="flex items-center justify-center h-10 font-semibold text-[0.6rem] sm:text-xs text-slate-500 dark:text-slate-400">${day}</div>`;
   });
   for (let i = 0; i < startDayOfWeek; i++) {
     elements.calendarGrid.innerHTML += "<div></div>";
@@ -233,7 +278,7 @@ const renderCalendar = () => {
     const date = currentDate.date(i);
     const dayEl = document.createElement("div");
     dayEl.className =
-      "calendar-day relative flex items-center justify-center h-10 w-10 mx-auto text-sm rounded-full cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700";
+      "calendar-day relative flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 mx-auto text-sm rounded-full cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700";
     dayEl.textContent = i;
     dayEl.dataset.date = date.format("YYYY-MM-DD");
     if (allTasks.some((task) => dayjs(task.deadline).isSame(date, "day"))) {
@@ -795,9 +840,17 @@ document
   .addEventListener("click", () => openLoginModal("change"));
 
 document.getElementById("copy-id-btn").addEventListener("click", () => {
-  navigator.clipboard.writeText(userId).then(() => {
+  try {
+    const tempInput = document.createElement("input");
+    document.body.appendChild(tempInput);
+    tempInput.value = userId;
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
     showNotification("User ID berhasil disalin!", "info", "Disalin!");
-  });
+  } catch (err) {
+    showNotification("Gagal menyalin ID.", "danger", "Error");
+  }
 });
 document.getElementById("logout-btn").addEventListener("click", async () => {
   const isTemporaryId = auth.currentUser && userId === auth.currentUser.uid;
@@ -817,9 +870,17 @@ document
     closeModal(elements.logoutConfirmModal, elements.logoutConfirmModalContent)
   );
 document.getElementById("logout-copy-id-btn").addEventListener("click", () => {
-  navigator.clipboard.writeText(userId).then(() => {
+  try {
+    const tempInput = document.createElement("input");
+    document.body.appendChild(tempInput);
+    tempInput.value = userId;
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
     showNotification("ID berhasil disalin!", "info", "Disalin!");
-  });
+  } catch (err) {
+    showNotification("Gagal menyalin ID.", "danger", "Error");
+  }
 });
 document
   .getElementById("logout-change-id-btn")
@@ -1276,7 +1337,10 @@ const setupUserData = (realUid, customId = null) => {
   unsubscribeFromTasks = onSnapshot(
     tasksCollectionRef,
     (snapshot) => {
-      allTasks = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      allTasks = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       renderAll();
       if (isFirstDataLoad) {
         const hasSeenPrompt = sessionStorage.getItem("hasSeenChangeIdPrompt");
@@ -1444,8 +1508,8 @@ const showInitialAlerts = () => {
 
 // --- Gemini API Functions ---
 const callGeminiForText = async (prompt) => {
-  const apiKey = "YOUR_GEMINI_API_KEY_PLACEHOLDER";
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+   const apiKey = "YOUR_GEMINI_API_KEY_PLACEHOLDER";
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
   const payload = { contents: [{ parts: [{ text: prompt }] }] };
   const response = await fetch(apiUrl, {
     method: "POST",
@@ -1464,8 +1528,8 @@ const callGeminiForText = async (prompt) => {
 };
 
 const callGeminiForSmartAdd = async (prompt) => {
-  const apiKey = "YOUR_GEMINI_API_KEY_PLACEHOLDER";
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+ const apiKey = "YOUR_GEMINI_API_KEY_PLACEHOLDER";
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
   const payload = {
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: {
@@ -1554,11 +1618,13 @@ const handleSmartAdd = async (buttonEl) => {
     return;
   }
 
-  const originalText = buttonEl.innerHTML;
-  buttonEl.innerHTML = '<div class="btn-spinner"></div>';
+  const originalText = buttonEl.querySelector(".btn-text").textContent;
+  const btnTextEl = buttonEl.querySelector(".btn-text");
+  btnTextEl.textContent = "";
+  buttonEl.innerHTML = '<div class="btn-spinner"></div>' + buttonEl.innerHTML;
   buttonEl.disabled = true;
 
-  const prompt = `Analisis teks berikut dan ekstrak tugas-tugas yang dapat ditindaklanjuti. Untuk setiap tugas, identifikasi nama tugas dan deadline jika disebutkan dengan bahasa yang bagus dan huruf yang besar kecilnya sesuai. Jika tidak ada deadline, gunakan tanggal dan waktu saat ini (${dayjs().format()}). Kembalikan hasilnya HANYA dalam format array JSON dari objek. Setiap objek harus memiliki properti "name" (string) dan "deadline" (string dalam format YYYY-MM-DDTHH:mm). Teks untuk dianalisis: "${text}"`;
+  const prompt = `Analisis teks berikut dan ekstrak tugas-tugas yang dapat ditindaklanjuti. Untuk setiap tugas, identifikasi nama tugas dan deadline jika disebutkan. Jika tidak ada deadline, gunakan tanggal dan waktu saat ini (${dayjs().format()}). Kembalikan hasilnya HANYA dalam format array JSON dari objek. Setiap objek harus memiliki properti "name" (string) dan "deadline" (string dalam format YYYY-MM-DDTHH:mm). Teks untuk dianalisis: "${text}"`;
 
   try {
     const suggestedTasks = await callGeminiForSmartAdd(prompt);
@@ -1576,7 +1642,8 @@ const handleSmartAdd = async (buttonEl) => {
     console.error("Error with Smart Add:", error);
     showNotification("Gagal menghubungi AI untuk memproses teks.", "danger");
   } finally {
-    buttonEl.innerHTML = originalText;
+    buttonEl.querySelector(".btn-spinner").remove();
+    btnTextEl.textContent = originalText;
     buttonEl.disabled = false;
   }
 };
