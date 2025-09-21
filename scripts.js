@@ -1054,6 +1054,7 @@
           panicTime = parseInt(localStorage.getItem("panicTime")) || 5;
           updateMuteIcon();
           document.body.addEventListener("click", initAudio, { once: true });
+          document.body.addEventListener("touchend", initAudio, { once: true });
           document.body.addEventListener("keydown", initAudio, { once: true });
           let deferredPrompt;
           const installBtn = document.getElementById("install-btn");
